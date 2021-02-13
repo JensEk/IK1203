@@ -10,12 +10,18 @@ public class TCPClient {
       byte[] fromServerBuffer= new byte[1024];
       Socket clientSocket= new Socket(hostname, port);
       clientSocket.setSoTimeout(1000);
-      clientSocket.setReceiveBufferSize(1000);
+
 
       byte [] encodedBytes= ToServer.getBytes(StandardCharsets.UTF_8);
       clientSocket.getOutputStream().write(encodedBytes);
 
+      try {
       clientSocket.getInputStream().read(fromServerBuffer);
+      }
+      catch(java.net.SocketTimeoutException e) {
+        System.out.println("***Server time out***");
+      }
+
 
       String decodedString= new String(fromServerBuffer, StandardCharsets.UTF_8);
       return decodedString;
@@ -27,10 +33,13 @@ public class TCPClient {
       byte[] fromServerBuffer= new byte[1024];
       Socket clientSocket= new Socket(hostname, port);
       clientSocket.setSoTimeout(1000);
-      clientSocket.setReceiveBufferSize(1000);
 
-
+      try {
       clientSocket.getInputStream().read(fromServerBuffer);
+      }
+      catch(java.net.SocketTimeoutException e) {
+        System.out.println("***Server time out***");
+      }
 
       String decodedString= new String(fromServerBuffer, StandardCharsets.UTF_8);
       return decodedString;
